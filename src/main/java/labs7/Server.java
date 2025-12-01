@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 
 public class Server extends Thread {
 
-    private final ExecutorService threadPool = Executors.newCachedThreadPool();
+    public static ExecutorService threadPool = Executors.newCachedThreadPool();
 
     @Override
     public void run() {

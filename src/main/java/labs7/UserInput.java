@@ -11,7 +11,7 @@ public class UserInput extends Thread {
             String line = sc.nextLine();
 
             // send the message
-            PeerList.broadcast(line);
+            PeerList.broadcast(new Message(MessageType.CHAT, line));
         }
     }
 }

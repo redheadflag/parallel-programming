@@ -37,22 +37,36 @@ public class Peer implements Runnable{
         Logger.info("Connected");
 
         while (true) {
-            String message = readMessage();
-            if (message == null) {
+            String rawMessage = readMessage();
+            if (rawMessage == null) {
                 break;
             }
+
+            Message message = null;
+            try {
+                message = new Message(rawMessage);
+            }
+            catch (Exception e) {
+                Logger.error("Error parsing raw message: " + e.getMessage());
+            }
+
+            TaskQueue.addTask(new Task(message, this));
         }
 
         PeerList.removePeer(this);
         Logger.warn("Disconnected...");
     }
 
-    public void sendMessage(String message) {
+    public void sendMessage(Message message) {
         try {
             writer.write(message + "\n");
             writer.flush();
         } catch (IOException e) {
             Logger.error("Error sending message: " + e.getMessage());
         }
+    }
+
+    public String getIp() {
+        return socket.getInetAddress().getHostAddress();
     }
 }
